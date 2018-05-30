@@ -23,24 +23,29 @@ Finds the minimum-cost path in an AVL tree
 */
 int FindMinPath(struct AVLTree *tree, TYPE *path)
 {
-        int path_len = 0; /* the initial length of the min-cost path */
-        struct AVLnode * current = tree->root;
-        TYPE min_cost = (TYPE) 10^6 * tree->cnt; /* initial high value for minimum */
-        int c_path_len = 0; /* length of a candidate path */
-        TYPE candidate_path[100]; /* candidate path is a static array */
+      int path_len = 0; /* the initial length of the min-cost path */
+      struct AVLnode * current = tree->root;
+      TYPE min_cost = (TYPE) 10^6 * tree->cnt; /* initial high value for minimum */
+      int c_path_len = 0; /* length of a candidate path */
+      TYPE candidate_path[100]; /* candidate path is a static array */
 
-        path[path_len] = tree->root->val; /* min-cost path must contain the root */
-        path_len++;
+      path[path_len] = tree->root->val; /* min-cost path must contain the root */
+      path_len++;
 
 
         /* Write this part of the function */
-        if (tree->cnt > 1){
+      if (tree->cnt > 1)
+      {
+        void preorder(tree->root,
+                       min_cost,
+                       path, path_len,
+                       candidate_path, c_path_len,
+                       0, tree->root->val);
 
-               /* Traverse the tree and find the min-cost path */
+        /* Traverse the tree and find the min-cost path */
 
-               /* FIX ME */
 
-        }
+      }
 	return path_len;
 }
 
@@ -65,6 +70,7 @@ Input argument:
      path_len = number of elements in path array,
      candidate_path = currently considered path array
      c_path_len = number of elements in the candidate path array
+     sumDiff = cumulative cost of the candidate path
 
 pre: assume that all input arguments are well initialized and have enough memory space
 
@@ -88,12 +94,23 @@ void preorder(struct AVLnode *node,
     sumDiff = sumDiff + absoluteDiff(parent_value, node->val);
 
     /* Write the recursion case(s) and the stopping-recursion case(s) */
-    if(node == 0)
+
+    /*RECURSION*/
+    if(node->left != 0)
     {
-
+      preorder(node->left, min_cost, path, path_len, candidate_path, c_path_len, sumDiff, parent_value)
     }
-
-
+    if(node->right != 0)
+    {
+      preorder(node->right, min_cost, path, path_len, candidate_path, c_path_len, sumDiff, parent_value)
+    }
+    /*STOP*/
+    if(LT(sumDiff, (*min_cost) ))
+    {
+      (*min_cost) = sumDiff;
+      path = candidate_path;
+      (*path_len) = (*c_path_len);
+    }
 }
 
 
